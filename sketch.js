@@ -2,8 +2,8 @@ const GRID_SIZE = 20;
 const CANVAS_SIZE = 600;
 const OFFSET = GRID_SIZE /2;
 let gameOver = false;
-let headX = 300;
-let headY = 300;
+let headX = [300];
+let headY = [300];
 let xDir = 1;
 let yDir = 0;
 let foodX;
@@ -20,10 +20,12 @@ function setup()
 }
 function draw()
 {
+    background(0);
     snakeLogic();
     circleLogic();
     boundaryCheck(headX,headY);   
     console.log(foodX,foodY)
+    
 
 }
 function boundaryCheck(x,y)
@@ -77,16 +79,23 @@ function snakeLogic()
 {
     if (!gameOver)
     {        
-        // if game is not over make snake 
-        square(headX += GRID_SIZE * xDir,headY += GRID_SIZE * yDir,GRID_SIZE);
+        //if game is not over make snake 
+        
+
+        for (let i =0; i < headX.length; i++)
+        {
+            square(headX[i] += GRID_SIZE * xDir,headY[i]+= GRID_SIZE *yDir,GRID_SIZE)
+        }
+        
     }
 }
 function circleLogic()
 {
     circle(foodX, foodY, GRID_SIZE);
-    if ((headX + OFFSET) === foodX && (headY + OFFSET) === foodY)
+    if ((headX[0] + OFFSET) === foodX && (headY[0] + OFFSET) === foodY)
     {
         createFood();
-        score++;
+        headX.push(headX[headX.length-1]+ GRID_SIZE)
+        headY.push(headY[headY.length-1])
     }
 }
