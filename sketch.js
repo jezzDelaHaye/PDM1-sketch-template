@@ -1,7 +1,6 @@
 const GRID_SIZE = 20;
 const CANVAS_SIZE = 600;
 const OFFSET = GRID_SIZE /2;
-let gameOver = false;
 let headX = [300];
 let headY = [300];
 let xDir = 1;
@@ -21,19 +20,18 @@ function setup()
 function draw()
 {
     background(0);
+    checkerBoard();
     snakeLogic();
     circleLogic();
     boundaryCheck(headX,headY);   
-    console.log(foodX,foodY)
-    
-
+    console.log(headX[0],headY[0])
 }
 function boundaryCheck(x,y)
 {
     //checks values of the snakes head against the canvas, ends game if out of bounds 
-    if (x >= CANVAS_SIZE|| x <=0 || y >= CANVAS_SIZE || y<=0 )
+    if (headX[0] >= CANVAS_SIZE|| headX[0] <=0 || headY[0] >= CANVAS_SIZE || headY[0]<=0 )
     {
-        (gameOver === true);
+        restartGame();
     }
 
 }
@@ -44,50 +42,52 @@ function createFood()
     foodY = (round (random(0,CANVAS_SIZE)/GRID_SIZE) * GRID_SIZE + OFFSET)
 }
 function keyPressed()
-{
-    
+{ 
     if (key === 'w' || keyCode === UP_ARROW)
-    {
+    {            
         //up
         xDir = 0;
-        yDir = -1;
-        console.log("up")
+        yDir = -1; 
     }
     if (key === 's' || keyCode === DOWN_ARROW)
     {
         //down
         xDir = 0;
-        yDir = 1;
-        console.log("down")
+        yDir = 1; 
     }
     if (key === 'a' || keyCode === LEFT_ARROW)
     {
         //left
         xDir = -1;
         yDir = 0;
-        console.log("left")
     }
     if (key === 'd' || keyCode === RIGHT_ARROW)
     {
         //right
         xDir = 1;
         yDir = 0;
-        console.log("right")
     }
+    
+    
 }
 function snakeLogic()
 {
-    if (!gameOver)
-    {        
-        //if game is not over make snake 
-        
-
-        for (let i =0; i < headX.length; i++)
-        {
-            square(headX[i] += GRID_SIZE * xDir,headY[i]+= GRID_SIZE *yDir,GRID_SIZE)
-        }
-        
+    
+    for(let i = headX.length - 1; i > 0; i--)
+    {
+        headX[i] = headX[i-1];
+        headY[i] = headY[i-1];
     }
+
+    headX[0] += GRID_SIZE * xDir;
+    headY[0] += GRID_SIZE * yDir;
+
+    for(let i =0; i<headX.length; i++)
+    {    
+        fill(0);
+        square(headX[i],headY[i],GRID_SIZE);        
+    }
+    
 }
 function circleLogic()
 {
@@ -98,4 +98,39 @@ function circleLogic()
         headX.push(headX[headX.length-1]+ GRID_SIZE)
         headY.push(headY[headY.length-1])
     }
+}
+
+function checkerBoard()
+{
+    noStroke();
+    let i =0;
+    for (let x = 0; x < CANVAS_SIZE; x += GRID_SIZE) 
+    {
+        i++;
+        for (let y = 0; y < CANVAS_SIZE; y += GRID_SIZE) 
+        {
+            i++;
+            if(i % 2 === 0)
+            {
+                fill (0,255,255)
+                square(x, y, GRID_SIZE);
+            }
+            else
+            { 
+                fill(127,255,212);
+                square(x, y, GRID_SIZE);
+            }
+            
+        }
+    }
+}
+function restartGame()
+{
+    gameOver = false;
+    headX = [300];
+    headY = [300];
+    xDir = 1;
+    yDir = 0;
+    score = 0;
+    createFood();
 }
