@@ -3,7 +3,7 @@ const CANVAS_SIZE = 600;
 const OFFSET = GRID_SIZE /2;
 let headX = [300];
 let headY = [300];
-let xDir = 1;
+let xDir = 0;
 let yDir = 0;
 let foodX;
 let foodY;
@@ -44,28 +44,42 @@ function createFood()
 function keyPressed()
 { 
     if (key === 'w' || keyCode === UP_ARROW)
-    {            
+    {        
+        if (!(yDir === 1))
+        {
+            xDir = 0;
+            yDir = -1;
+        }
         //up
-        xDir = 0;
-        yDir = -1; 
+    
     }
     if (key === 's' || keyCode === DOWN_ARROW)
     {
+        if (!(yDir === -1))
+        {
+            xDir = 0;
+            yDir = 1;
+        }
         //down
-        xDir = 0;
-        yDir = 1; 
     }
     if (key === 'a' || keyCode === LEFT_ARROW)
     {
+        if (!(xDir === 1))
+        {
+            xDir = -1;
+            yDir = 0;
+        }
         //left
-        xDir = -1;
-        yDir = 0;
+        
     }
     if (key === 'd' || keyCode === RIGHT_ARROW)
     {
+        if (!(xDir === -1))
+        {
+            xDir = 1;
+            yDir = 0;
+        }
         //right
-        xDir = 1;
-        yDir = 0;
     }
     
     
